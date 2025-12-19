@@ -90,7 +90,7 @@ chord_composer:
     - xform/^ef(?![左右])/u左/
     - xform/^rt(?![左右])/y左/
     - xform/^as(?![左右])/l左/
-    - xform/^sd(?![左右])/k左/
+    - xform/^sd(?![左右])/k左/ # 注意是sd还是ds写法，要看alphabet
     - xform/^df(?![左右])/j左/
     - xform/^dg(?![左右])/h左/
     - xform/^cv(?![左右])/m左/
