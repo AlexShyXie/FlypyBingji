@@ -1,0 +1,196 @@
+# Rime schema settings
+# encoding: utf-8
+
+schema:
+  schema_id: flypybingji
+  name: 小鹤音形并击
+  version: "10.9.4"
+  author:
+    - 方案设计：辉
+  description: |
+    小鹤音形并击输入法
+  dependencies:
+    - flypydz
+
+punctuator:
+  import_preset: default
+
+switches:
+  - name: ascii_mode
+    reset: 0
+    states: [ 中文, 英文 ]
+  - name: full_shape
+    states: [ 半角, 全角 ]
+  - name: simplification
+    states: [ 简, 繁 ]
+    reset: 0
+  - name: ascii_punct
+    states: [ 。，, ．， ]
+    reset: 0
+
+engine:
+  processors:
+    - ascii_composer
+    - chord_composer # 并击
+    - recognizer
+    - key_binder
+    - speller
+    - punctuator
+    - selector
+    - navigator
+    - express_editor
+  segmentors:
+    - ascii_segmentor
+    - matcher
+    - abc_segmentor
+    - punct_segmentor
+    - fallback_segmentor
+  translators:
+    - punct_translator
+    - table_translator
+    - lua_translator@*flypy_date_translator
+    - lua_translator@*flypy_time_translator
+    - lua_translator@*flypy_fast_translator
+    - reverse_lookup_translator
+    - history_translator@history
+    - lua_translator@*calculator_translator
+    - lua_translator@*input_statistics     #一个输入统计的脚本，以日、周、月、年等维度的统计
+  filters:
+    - simplifier
+    - simplifier@simplification
+    - uniquifier
+
+  
+speller:
+  #alphabet: "abcdefghijklmnopqrstuvwxyz;'"
+  #initials: ';abcdefghijklmnopqrstuvwxyz'
+  alphabet: "abcdefghijklmnopqrstuvwxyz;'/"
+  initials: ';abcdefghijklmnopqrstuvwxyz/'
+  finals: "'"
+  #delimiter: " '"
+  max_code_length: 4
+  auto_select: true   #顶字上屏
+  auto_select_pattern: ^;.$|^\w{4}$
+  auto_clear: 20 #manual|auto|max_length 空码按下一键确认清屏|空码自动清|达到最长码时后码顶上清屏
+chord_composer:
+  finish_chord_on_first_key_release: true 
+  # 并击把键盘分两半，相当于两块键盘。两边同时击键，系统默认在其中一半上按的键先于另一半，由此得出上屛码
+  # alphabet: 字母表，包含用于并击的按键。击键虽有先后，形成并击时，一律以字母表顺序排列
+  # algebra: 拼写运算规则，将一组并击编码转换为拼音音节
+  # output_format: 并击完成后套用的式样，追加隔音符号
+  # prompt_format: 并击过程中套用的式样，加方括弧
+  alphabet: "aqzswxdecfrvgtbpolikmujnyh'/"
+  algebra:
+    # - "xform/^,$/,/"
+    # - "xform/^\.$/./"
+    # 定义左手11键       
+    - xform/^qw(?![左右])/p左/
+    - xform/^we(?![左右])/o左/
+    - xform/^er(?![左右])/i左/
+    - xform/^ef(?![左右])/u左/
+    - xform/^rt(?![左右])/y左/
+    - xform/^as(?![左右])/l左/
+    - xform/^sd(?![左右])/k左/
+    - xform/^df(?![左右])/j左/
+    - xform/^dg(?![左右])/h左/
+    - xform/^cv(?![左右])/m左/
+    - xform/^xv(?![左右])/n左/
+
+    # 定义右手15键
+    - xform/po(?![左右])$/q右/
+    - xform/oi(?![左右])$/w右/
+    - xform/iu(?![左右])$/e右/
+    - xform/ij(?![左右])$/r右/
+    - xform/uy(?![左右])$/t右/
+    - xform/lk(?![左右])$/a右/
+    - xform/kj(?![左右])$/s右/
+    - xform/lj(?![左右])$/d右/
+    - xform/ih(?![左右])$/f右/
+    - xform/uh(?![左右])$/g右/    
+    - xform/lm(?![左右])$/z右/
+    - xform/km(?![左右])$/x右/
+    - xform/ln(?![左右])$/c右/
+    - xform/kn(?![左右])$/v右/
+    - xform/in(?![左右])$/b右/
+
+
+  # 并击完成后套用式样
+  output_format:
+    - "xform/^(.*)左/$1/"
+    - "xform/^(.*)右$/$1/"
+    - "xform/^(.*)左(.*)右$/$1$2/"
+      
+ # 并击过程中套用式样  
+  prompt_format:
+    # 加方括号
+    - "xform/^(.*)$/[$1]/" 
+
+translator:
+  dictionary: flypy
+  enable_charset_filter: false
+  enable_sentence: false
+  enable_completion: true # 编码提示开关
+  enable_user_dict: false
+  disable_user_dict_for_patterns:
+    - "^z.*$"
+  spelling_hints: 8  # 添加这个，控制提示长度
+  strict_spelling: true  # 添加这个，严格拼写模式
+  comment_format:
+    - xform|~||            #去掉逐码提示前的~
+    - "xform/^([a-z]{1,3})$/\\1/"
+    
+history:
+  input: ;f
+  size: 1 #重复前几次上屏
+  initial_quality: 1 #首选
+
+simplification:
+  opencc_config: s2tw.json
+  option_name: simplification
+  tips: all #简繁对照
+
+reverse_lookup:
+  dictionary: flypydz
+  comment_format:
+    # - xform/^/〔/
+    # - xform/$/〕/
+    - xform/ / /
+
+
+key_binder:
+  import_preset: default #方案切换相关
+  bindings:
+    - {accept: minus, send: Page_Up, when: paging} # [上翻页 好像无效
+    - {accept: plus, send: Page_Down, when: has_menu} # ]下翻页 好像无效
+    - {accept: bracketleft, send: Page_Up, when: paging} # [上翻页
+    - {accept: bracketright, send: Page_Down, when: has_menu} # ]下翻页
+    - {accept: comma, send: comma, when: paging} #注销逗号翻页
+    - {accept: period, send: period, when: has_menu} #注销句号翻页
+    - {accept: semicolon, send: 2, when: has_menu} #分号次选
+  #  - {accept: Release+semicolon, send: semicolon, when: has_menu} #如启用此行，则分号引导符号功能无效
+    - {accept: Release+period, send: period, when: composing} #句号顶屏
+    - {accept: Release+comma, send: comma, when: composing} #逗号顶屏
+    - {accept: "Tab", send: Escape, when: composing}
+    - {accept: "Shift_R", send: Escape, when: composing}
+    # - {accept: "Shift+space", toggle: full_shape, when: always} #切换全半角
+    - {accept: "Control+period", toggle: ascii_punct, when: always} #切换中英标点
+    - {accept: "Control+j", toggle: simplification, when: always} #切换简繁
+
+recognizer:
+  import_preset: default
+  patterns:
+    #uppercase: "[A-Z][-_+.'0-9A-Za-z]*$"
+    uppercase: "" #中文状态大写锁定直接上屏
+    reverse_lookup: "[a-z`]*`+[a-z`]*"
+    #punct: "
+    punct: '^/([0-9]+|[A-Za-z]+)$'
+    expression: "^=.*$"
+
+menu:
+  page_size: 3 #候选项数
+
+style:
+  horizontal: true #横／直排
+  inline_preedit: true #输入码内嵌
+  layout:
+    min_width: 70
