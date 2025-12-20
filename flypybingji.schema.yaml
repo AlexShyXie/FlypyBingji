@@ -137,7 +137,13 @@ translator:
   strict_spelling: true  # 添加这个，严格拼写模式
   comment_format:
     - xform|~||            #去掉逐码提示前的~
-    - "xform/^([a-z]{1,3})$/\\1/"
+    - "xform/^([a-z]{1,4})$/\\1/"
+
+punctuator:
+  full_shape:
+    __include: punctuation:/full_shape
+  half_shape:
+    __include: punctuation:/half_shape
     
 history:
   input: ;f

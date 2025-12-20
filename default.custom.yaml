@@ -2,9 +2,13 @@ customization:
   distribution_code_name: Weasel
   distribution_version: 0.17.4
   generator: "Rime::SwitcherSettings"
-  modified_time: "Thu Dec 18 20:59:11 2025"
+  modified_time: "Sat Dec 20 09:50:11 2025"
   rime_version: 1.13.1
 patch:
+  punctuator:
+    full_shape: {__include: "punctuation:/full_shape"}
+    half_shape: {__include: "punctuation:/half_shape"}
   schema_list:
     - {schema: flypy}
     - {schema: flypybingji}
+    - {schema: wanxiang_pro}
