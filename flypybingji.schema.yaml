@@ -88,11 +88,11 @@ chord_composer:
     - xform/^we(?![左右])/o左/
     - xform/^er(?![左右])/i左/
     - xform/^ef(?![左右])/u左/
-    - xform/^rt(?![左右])/y左/
+    - xform/^et(?![左右])/y左/
     - xform/^as(?![左右])/l左/
-    - xform/^sd(?![左右])/k左/ # 注意是sd还是ds写法，要看alphabet
+    - xform/^sd(?![左右])/k左/
     - xform/^df(?![左右])/j左/
-    - xform/^dg(?![左右])/h左/
+    - xform/^rg(?![左右])/h左/
     - xform/^cv(?![左右])/m左/
     - xform/^xv(?![左右])/n左/
 
@@ -101,7 +101,7 @@ chord_composer:
     - xform/oi(?![左右])$/w右/
     - xform/iu(?![左右])$/e右/
     - xform/ij(?![左右])$/r右/
-    - xform/uy(?![左右])$/t右/
+    - xform/iy(?![左右])$/t右/
     - xform/lk(?![左右])$/a右/
     - xform/kj(?![左右])$/s右/
     - xform/lj(?![左右])$/d右/
