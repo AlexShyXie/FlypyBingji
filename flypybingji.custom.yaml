@@ -4,7 +4,7 @@ patch:
 
 
   punctuator:
-    digit_separators: ":,."  #数字分隔符
+    digit_separators: ""  #数字分隔符
     __include: wanxiang_symbols:/symbol_table         # 从 symbols.yaml 导入配置
 
   key_binder/bindings/+: 
